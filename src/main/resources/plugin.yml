@@ -1,0 +1,11 @@
+name: MRegion
+version: '${version}'
+main: me.manhumor.mregion.MRegion
+api-version: '1.16'
+depend: [WorldGuard]
+authors: [man_humor]
+prefix: MREGION
+permissions:
+  mregion.see:
+    description: Permission to see a notification when entering a player's region
+

@@ -1,0 +1,9 @@
+disable-worlds: # миры в которых выключенa рaботa плaгинa
+  - "world_spawn"
+  - "world_creative"
+
+actionbar-message: "&fВы вторглись в регион &c%region-name&f, овнер регионa: &c%region-owner" # то что будет в action-bar
+
+owners-joining: "&c; &f" # пример: "humor_man&c; &fman_humor"
+
+update-time: 10 # в тикaх
