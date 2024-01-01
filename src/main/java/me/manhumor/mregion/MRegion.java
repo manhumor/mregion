@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,19 +18,25 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MRegion extends JavaPlugin implements Listener {
+    private FileConfiguration config;
+
     private Set<String> disabledWorlds;
+    private Set<String> disabledRegions;
     private String ownersJoining;
     private String actionbarMessage;
 
-    private StringBuilder regionOwner = new StringBuilder();
+    private final StringBuilder regionOwner = new StringBuilder();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        config = getConfig();
 
-        disabledWorlds = new HashSet<>(getConfig().getStringList("disable-worlds"));
-        ownersJoining = ColorParser.parseString(getConfig().getString("owners-joining"));
-        actionbarMessage = ColorParser.parseString(getConfig().getString("actionbar-message"));
+        disabledWorlds = new HashSet<>(config.getStringList("disable-worlds"));
+        disabledRegions = new HashSet<>(config.getStringList("disable-regions"));
+
+        ownersJoining = ColorParser.parseString(config.getString("owners-joining"));
+        actionbarMessage = ColorParser.parseString(config.getString("actionbar-message"));
 
         getLogger().info("§c. . . . . . . . . . . .");
         getLogger().info("§c| §fPlugin §cM§fRegion");
@@ -37,7 +44,7 @@ public class MRegion extends JavaPlugin implements Listener {
         getLogger().info("§c| §f- §cI wish you §fluck!!!");
         getLogger().info("§c˙ ˙ ˙ ˙ ˙ ˙ ˙ ˙ ˙ ˙ ˙ ˙");
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::run, 5L, (long)getConfig().getInt("update-time"));
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::run, 5L, (long)config.getInt("update-time"));
     }
 
     @Override
@@ -59,7 +66,10 @@ public class MRegion extends JavaPlugin implements Listener {
                         .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(BukkitAdapter.asBlockVector(location));
 
                 for (ProtectedRegion region : regionSet) {
+                    if (disabledRegions.contains(region.getId())) return;
+
                     Set<UUID> ownerUUIDs = region.getOwners().getUniqueIds();
+
                     if (ownerUUIDs.isEmpty()) return;
 
                     regionOwner.setLength(0);

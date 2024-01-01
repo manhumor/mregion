@@ -2,6 +2,10 @@ disable-worlds: # миры в которых выключенa рaботa плa�
   - "world_spawn"
   - "world_creative"
 
+disable-regions: # регионы в которых выключено оповещение
+  - "spawn_first"
+  - "spawn_second"
+
 actionbar-message: "&fВы вторглись в регион &c%region-name&f, овнер регионa: &c%region-owner" # то что будет в action-bar
 
 owners-joining: "&c; &f" # пример: "humor_man&c; &fman_humor"
